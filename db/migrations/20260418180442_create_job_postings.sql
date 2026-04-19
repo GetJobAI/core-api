@@ -40,7 +40,7 @@ CREATE POLICY user_delete ON public.job_postings
 -- Triggers
 CREATE TRIGGER tr_job_postings_set_updated_at
     BEFORE UPDATE ON public.job_postings
-    FOR EACH ROW EXECUTE FUNCTION public.fn_set_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION internal.fn_set_updated_at();
 
 
 -- migrate:down

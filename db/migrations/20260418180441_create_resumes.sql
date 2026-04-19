@@ -40,7 +40,7 @@ CREATE POLICY user_delete ON public.resumes
 -- Triggers
 CREATE TRIGGER tr_resumes_set_updated_at
     BEFORE UPDATE ON public.resumes
-    FOR EACH ROW EXECUTE FUNCTION public.fn_set_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION internal.fn_set_updated_at();
 
 
 -- migrate:down

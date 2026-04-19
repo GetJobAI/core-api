@@ -39,7 +39,7 @@ CREATE POLICY user_access_own_optimizations ON public.optimizations
 -- Triggers
 CREATE TRIGGER tr_optimizations_set_updated_at
     BEFORE UPDATE ON public.optimizations
-    FOR EACH ROW EXECUTE FUNCTION public.fn_set_updated_at();
+    FOR EACH ROW EXECUTE FUNCTION internal.fn_set_updated_at();
 
 
 -- migrate:down
