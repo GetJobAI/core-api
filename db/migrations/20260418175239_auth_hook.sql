@@ -9,6 +9,8 @@ BEGIN
     _user_role := current_setting('request.header.x-user-role', TRUE);
     _user_id := current_setting('request.header.x-user-id', TRUE);
 
+    RAISE LOG 'hook: role=% sub=%', _user_role, _user_id;
+
     IF _user_role IS NOT NULL AND _user_role <> '' THEN
         EXECUTE format('SET LOCAL ROLE frontend_%I', _user_role);
     ELSE
