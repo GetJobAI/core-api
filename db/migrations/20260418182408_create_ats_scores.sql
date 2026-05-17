@@ -28,7 +28,7 @@ CREATE POLICY user_select ON public.ats_scores
         EXISTS (
             SELECT 1 FROM public.resumes
             WHERE resumes.id = ats_scores.resume_id
-            AND resumes.user_id = current_setting('request.jwt.claim.sub', TRUE)
+            AND resumes.user_id = current_setting('request.jwt.claims', true)::json->>'sub'
         )
     );
 

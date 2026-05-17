@@ -32,7 +32,7 @@ CREATE POLICY user_access_own_optimizations ON public.optimizations
         EXISTS (
             SELECT 1 FROM public.resumes
             WHERE resumes.id = optimizations.resume_id
-            AND resumes.user_id = current_setting('request.jwt.claim.sub', TRUE)
+            AND resumes.user_id = current_setting('request.jwt.claims', true)::json->>'sub'
         )
     );
 

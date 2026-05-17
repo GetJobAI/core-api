@@ -1,7 +1,7 @@
 -- migrate:up
 CREATE TABLE public.resumes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id TEXT NOT NULL DEFAULT current_setting('request.jwt.claim.sub', TRUE),
+    user_id TEXT NOT NULL DEFAULT current_setting('request.jwt.claims', true)::json->>'sub',
     content JSONB NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -22,20 +22,20 @@ CREATE POLICY service_all ON public.resumes
 
 CREATE POLICY user_select ON public.resumes
     FOR SELECT TO normal_user
-    USING (user_id = current_setting('request.jwt.claim.sub', TRUE));
+    USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 CREATE POLICY user_insert ON public.resumes
     FOR INSERT TO normal_user
-    WITH CHECK (user_id = current_setting('request.jwt.claim.sub', TRUE));
+    WITH CHECK (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 CREATE POLICY user_update ON public.resumes
     FOR UPDATE TO normal_user
-    USING (user_id = current_setting('request.jwt.claim.sub', TRUE))
-    WITH CHECK (user_id = current_setting('request.jwt.claim.sub', TRUE));
+    USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub')
+    WITH CHECK (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 CREATE POLICY user_delete ON public.resumes
     FOR DELETE TO normal_user
-    USING (user_id = current_setting('request.jwt.claim.sub', TRUE));
+    USING (user_id = current_setting('request.jwt.claims', true)::json->>'sub');
 
 -- Triggers
 CREATE TRIGGER tr_resumes_set_updated_at
