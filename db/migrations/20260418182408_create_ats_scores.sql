@@ -10,7 +10,7 @@ CREATE TABLE public.ats_scores (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.ats_scores TO frontend_normal_user, service;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.ats_scores TO normal_user, service;
 
 COMMENT ON TABLE public.ats_scores IS 'Results of the analysis of resume compliance with job requirements.';
 COMMENT ON COLUMN public.ats_scores.score IS 'Compliance score from 0 to 100.';
@@ -23,12 +23,12 @@ CREATE POLICY service_all ON public.ats_scores
     FOR ALL TO service USING (TRUE) WITH CHECK (TRUE);
 
 CREATE POLICY user_select ON public.ats_scores
-    FOR SELECT TO frontend_normal_user
+    FOR SELECT TO normal_user
     USING (
         EXISTS (
             SELECT 1 FROM public.resumes
             WHERE resumes.id = ats_scores.resume_id
-            AND resumes.user_id = current_setting('auth.user_id', TRUE)
+            AND resumes.user_id = current_setting('request.jwt.claim.sub', TRUE)
         )
     );
 

@@ -11,7 +11,7 @@ CREATE TABLE public.optimizations (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.optimizations TO frontend_normal_user, service;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.optimizations TO normal_user, service;
 
 COMMENT ON TABLE public.optimizations IS 'AI-generated optimization suggestions for improving resume alignment with a job posting.';
 COMMENT ON COLUMN public.optimizations.id IS 'Unique identifier for the optimization record.';
@@ -27,12 +27,12 @@ CREATE POLICY service_all ON public.optimizations
     FOR ALL TO service USING (TRUE) WITH CHECK (TRUE);
 
 CREATE POLICY user_access_own_optimizations ON public.optimizations
-    FOR SELECT TO frontend_normal_user
+    FOR SELECT TO normal_user
     USING (
         EXISTS (
             SELECT 1 FROM public.resumes
             WHERE resumes.id = optimizations.resume_id
-            AND resumes.user_id = current_setting('auth.user_id', TRUE)
+            AND resumes.user_id = current_setting('request.jwt.claim.sub', TRUE)
         )
     );
 
