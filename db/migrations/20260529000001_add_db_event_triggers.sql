@@ -8,7 +8,7 @@ BEGIN
             'action',    TG_OP,
             'id',        NEW.id::text,
             'timestamp', now()::text,
-            'data',      json_build_object('user_id', NEW.user_id)
+            'data',      json_build_object('id', NEW.id::text, 'user_id', NEW.user_id)
         )::text
     );
     RETURN NEW;
